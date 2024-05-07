@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+    {% for obj in object_list %}
+    <div class="card my-3">
+        <div class="card-header">
+            <a href="{{ obj.url }}">{{ obj.title }}</a>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ obj.description }}</p>
+          <p>{{ obj.city.name }} | {{ obj.language.name }} | <small>{{ obj.timestamp|date:"d-m-Y" }}</small></p>
+        </div>
+    </div>
+    {% endfor %}
+
+<form action="">
+    <label>Город:</label><br>
+    <input type="text" name="city"><br>
+    <label>Специальность:</label><br>
+    <input type="text" name="language"><br>
+    <input type="submit" value="submit">
+</form>
+
+{% endblock content %}
