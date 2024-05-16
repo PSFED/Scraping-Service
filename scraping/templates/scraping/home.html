@@ -3,24 +3,16 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
-    {% for obj in object_list %}
-    <div class="card my-3">
-        <div class="card-header">
-            <a href="{{ obj.url }}">{{ obj.title }}</a>
-        </div>
-        <div class="card-body">
-            <h4>{{ obj.company }}</h4>
-            <p class="card-text">{{ obj.description }}</p>
-            <p>{{ obj.city.name }} | {{ obj.language.name }} | <small>{{ obj.timestamp|date:"d-m-Y" }}</small></p>
-        </div>
+    
+<div class="row my-3">
+    <div class="col text-center">
+        <h2>Сервис по сбору и рассылке вакансий</h2>
     </div>
-    {% empty %}
-        <h3>К сожалению, по Вашему запросу ничего не найдено.</h3>
-    {% endfor %}
-
-    <div class="row">
-        <div class="col-md-6 mx-auto">
-            <form action="">
+</div>
+    <div class="row my-2">
+        <div class="col-md-8 mx-auto">
+            <h4>Для просмотра доступных вакансий заполните форму по одному из полей</h4>
+            <form action="{% url 'list' %}">
                 <div class="form-group">
                     {{ form.as_p }}
                 </div>
