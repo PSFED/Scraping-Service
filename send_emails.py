@@ -60,19 +60,29 @@ to = ADMIN_USER
 _html = ''
 if qs.exists():
     error = qs.first()
-    data = error.data
+    data = error.data['errors']
     for i in data:
         _html += f'<p><a href="{i["url"]}">Error: {i["title"]}</a></p><br>'
     subject = f"Ошибки скрапинга {today}"
     text_content = f"Ошибки скрапинга {today}"
+    data = error.data['user_data']
+    if data:
+        _html += '<hr>'
+        _html += '<h2>Пожелания пользователей</h2>'
+        for i in data:
+            _html += f'<p>Город: {i["title"]}, Специальность: {
+                i["language"]}, Е-мейл: {i["email"]}</p><br>'
+        subject = f"Пожелания пользователей {today}"
+        text_content = f"Пожелания пользователей {today}"
 
 qs = Url.objects.all().values('city', 'language')
 urls_dct = {(i['city'], i['language']): True for i in qs}
 urls_err = ''
 for keys in users_dct.keys():
     if keys not in urls_dct:
-        urls_err += f'''<p>Для города: {keys[0]
-                                        } и ЯП: {keys[1]} отсутствуют урлы</p><br>'''
+        if keys[0] and keys[1]:
+            urls_err += f'''<p>Для города: {keys[0]
+                                            } и ЯП: {keys[1]} отсутствуют урлы</p><br>'''
 if urls_err:
     subject += 'Отсутствующие урлы'
     _html += urls_err

@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from scraping.models import Vacancy, City, Language, Error, Url
 from scraping.parsers import *
 import django
-import codecs
+import datetime as dt
 import os
 import sys
 django.setup()
@@ -82,8 +82,16 @@ for job in jobs:
     except:
         pass
 if errors:
-    er = Error(data=errors).save()
+    qs = Error.objects.filter(timestamp=dt.date.today())
+    if qs.exists():
+        err = qs.first()
+        err.data.update({'errors': errors})
+        err.save()
+    else:
+        er = Error(data=f'errors:{errors}').save()
 
 # h = codecs.opne('work.txt', 'w', 'utf-8')
 # h.write(str(jobs))
 # h.close()
+ten_days_ago = dt.date.today() - dt.timedelta(10)
+Vacancy.objects.filter(timestamp__lte=ten_days_ago).delete()
