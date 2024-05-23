@@ -2,7 +2,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 from scraping.models import Vacancy, Error, Url
-from scraping_service.settings import EMAIL_HOST, EMAIL_HOST_PASSWORD, EMAIL_HOST_USER
+from scraping_service.settings.local_settings import EMAIL_HOST, EMAIL_HOST_PASSWORD, EMAIL_HOST_USER
 import django
 import datetime
 import os
@@ -60,12 +60,12 @@ to = ADMIN_USER
 _html = ''
 if qs.exists():
     error = qs.first()
-    data = error.data['errors']
+    data = error.data.get('errors', [])
     for i in data:
         _html += f'<p><a href="{i["url"]}">Error: {i["title"]}</a></p><br>'
     subject = f"Ошибки скрапинга {today}"
     text_content = f"Ошибки скрапинга {today}"
-    data = error.data['user_data']
+    data = error.data.get('user_data')
     if data:
         _html += '<hr>'
         _html += '<h2>Пожелания пользователей</h2>'
