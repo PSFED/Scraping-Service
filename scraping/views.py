@@ -35,7 +35,8 @@ def list_view(request):
             _filter['city__slug'] = city
         if language:
             _filter['language__slug'] = language
-        qs = Vacancy.objects.filter(**_filter)
+        qs = Vacancy.objects.filter(
+            **_filter).select_related('city', 'language')
 
         paginator = Paginator(qs, 10)
         pages = request.GET.get('page')
@@ -85,7 +86,8 @@ class VList(ListView):
             if language:
                 _filter['language__slug'] = language
 
-            qs = Vacancy.objects.filter(**_filter)
+            qs = Vacancy.objects.filter(
+                **_filter).select_related('city', 'language')
         return qs
 
 
